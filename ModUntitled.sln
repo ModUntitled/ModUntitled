@@ -3,15 +3,51 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModUntitled", "ModUntitled\ModUntitled.csproj", "{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "libs\Logger\Logger.csproj", "{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		DebugLegacy|Any CPU = DebugLegacy|Any CPU
+		ReleaseLegacy|Any CPU = ReleaseLegacy|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.DebugLegacy|Any CPU.ActiveCfg = Debug|Any CPU
+		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.DebugLegacy|Any CPU.Build.0 = Debug|Any CPU
+		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.ReleaseLegacy|Any CPU.ActiveCfg = Debug|Any CPU
+		{0150D195-21BE-46CE-B1ED-F1F4D7A060F7}.ReleaseLegacy|Any CPU.Build.0 = Debug|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.DebugLegacy|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.DebugLegacy|Any CPU.Build.0 = Debug|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.ReleaseLegacy|Any CPU.ActiveCfg = Release|Any CPU
+		{1C734127-AC83-4ECB-ABCA-32B98DFE49C7}.ReleaseLegacy|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.inheritsSet = null
+		$1.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $2
+		$2.NewLinesForBracesInTypes = False
+		$2.NewLinesForBracesInMethods = False
+		$2.NewLinesForBracesInProperties = False
+		$2.NewLinesForBracesInAccessors = False
+		$2.NewLinesForBracesInAnonymousMethods = False
+		$2.NewLinesForBracesInControlBlocks = False
+		$2.NewLinesForBracesInAnonymousTypes = False
+		$2.NewLinesForBracesInObjectCollectionArrayInitializers = False
+		$2.NewLinesForBracesInLambdaExpressionBody = False
+		$2.NewLineForElse = False
+		$2.NewLineForCatch = False
+		$2.NewLineForFinally = False
+		$2.scope = text/x-csharp
 	EndGlobalSection
 EndGlobal

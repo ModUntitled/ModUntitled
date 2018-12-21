@@ -1,0 +1,45 @@
+ModUntitled/bin/{TARGET}/Assembly-CSharp.Base.mm.dll
+libs/Logger/bin/{TARGET}/Logger.dll
+ModUntitled/bin/{TARGET}/MonoMod.exe
+ModUntitled/bin/{TARGET}/MonoMod.Utils.dll
+ModUntitled/bin/{TARGET}/Mono.Cecil.dll
+ModUntitled/bin/{TARGET}/Mono.Cecil.Mdb.dll
+ModUntitled/bin/{TARGET}/Mono.Cecil.Pdb.dll
+
+# external
+# libs/Ionic.Zip.dll
+# libs/YamlDotNet/YamlDotNet/bin/{TARGET-UNSIGNED}/YamlDotNet.dll
+# libs/MonoMod/bin/{TARGET}/MonoMod.exe
+# libs/MonoMod/packages/Mono.Cecil.0.10.0-beta5/lib/net35/Mono.Cecil.dll
+# libs/MonoMod/packages/Mono.Cecil.0.10.0-beta5/lib/net35/Mono.Cecil.Mdb.dll
+# libs/MonoMod/packages/Mono.Cecil.0.10.0-beta5/lib/net35/Mono.Cecil.Pdb.dll
+
+# in-house but technically external
+#libs/Eluant/Eluant/bin/{TARGET}/Eluant.dll
+# libs/Logger/bin/{TARGET}/Logger.dll
+# libs/MicroLua/MicroLua/bin/{TARGET}/MicroLua.dll
+# libs/Prefabric/Prefabric/bin/{TARGET}/Prefabric.dll
+# libs/Prefabric/Prefabric/bin/{TARGET}/Newtonsoft.Json.dll
+# libs/Prefabric/Prefabric/bin/{TARGET}/System.Xml.Linq.dll
+
+# internal [Assembly-CSharp]
+# Assembly-CSharp.Core.mm/bin/{TARGET}/Assembly-CSharp.Core.mm.dll
+# Assembly-CSharp.Base.mm/bin/{TARGET}/Assembly-CSharp.Base.mm.dll
+# Assembly-CSharp.TexMod.mm/bin/{TARGET}/Assembly-CSharp.TexMod.mm.dll
+
+# internal [UnityEngine]
+# UnityEngine.Core.mm/bin/{TARGET}/UnityEngine.CoreModule.Core.mm.dll
+# UnityEngine.Base.mm/bin/{TARGET}/UnityEngine.CoreModule.Base.mm.dll
+
+# licenses
+# LICENSE_MODTHEGUNGEON
+# LICENSE_MONO
+
+# resources
+# Resources
+
+# for the installer
+# metadata.yml
+
+# plugins
+# Plugins
