@@ -1,6 +1,10 @@
 ﻿#pragma warning disable 0626
 #pragma warning disable 0649
 
+///////////////////////////////
+//// CONTINUATION OF ENTRY ////
+///////////////////////////////
+
 using System;
 using ModTheGungeon;
 using UnityEngine;

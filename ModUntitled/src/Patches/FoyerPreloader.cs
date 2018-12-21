@@ -21,6 +21,7 @@ namespace ModUntitled.Patches {
         private new void Awake() {
             ModUntitled.Logger.Info("Mod Untitled entry point");
             ModUntitled.GameObject = new GameObject("Mod Untitled");
+            DontDestroyOnLoad(ModUntitled.GameObject);
 
             ModUntitled.Instance = ModUntitled.GameObject.AddComponent<ModUntitled>();
             ModUntitled.Instance.GamePreload();

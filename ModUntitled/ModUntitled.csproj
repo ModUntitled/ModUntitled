@@ -76,10 +76,59 @@
     <Compile Include="src\ModUntitled.cs" />
     <Compile Include="src\Patches\FoyerPreloader.cs" />
     <Compile Include="src\Patches\GameManager.cs" />
+    <Compile Include="src\External\SGUI\src\EMouseStatus.cs" />
+    <Compile Include="src\External\SGUI\src\ISGUIBackend.cs" />
+    <Compile Include="src\External\SGUI\src\SAnimation.cs" />
+    <Compile Include="src\External\SGUI\src\SElement.cs" />
+    <Compile Include="src\External\SGUI\src\SGUIExtensions.cs" />
+    <Compile Include="src\External\SGUI\src\SGUIRoot.cs" />
+    <Compile Include="src\External\SGUI\src\SModifier.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SAnimationSequence.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SEasings.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SFadeAnimation.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SFadeInAnimation.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SFadeOutAnimation.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SFadeOutShrinkSequence.cs" />
+    <Compile Include="src\External\SGUI\src\Animations\SShrinkAnimation.cs" />
+    <Compile Include="src\External\SGUI\src\Backends\SGUIIMBackend.cs" />
+    <Compile Include="src\External\SGUI\src\DFEXT\SGUIDFInput.cs" />
+    <Compile Include="src\External\SGUI\src\DotNetEXT\AddingNewEventArgs.cs" />
+    <Compile Include="src\External\SGUI\src\DotNetEXT\AddingNewEventHandler.cs" />
+    <Compile Include="src\External\SGUI\src\DotNetEXT\ICancelAddNew.cs" />
+    <Compile Include="src\External\SGUI\src\DotNetEXT\IRaiseItemChangedEvents.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SButton.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SGroup.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SImage.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SLabel.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SPreloader.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SRect.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\STextField.cs" />
+    <Compile Include="src\External\SGUI\src\Elements\SWindowTitleBar.cs" />
+    <Compile Include="src\External\SGUI\src\Modifiers\SInGameModifier.cs" />
+    <Compile Include="src\External\SGUI\src\Modifiers\SRandomLabelModifier.cs" />
+    <Compile Include="src\Patches\MainMenuFoyerController.cs" />
+    <Compile Include="src\GUI\FontConverter.cs" />
+    <Compile Include="src\DebugConsole\AutoCompletor.cs" />
+    <Compile Include="src\DebugConsole\Console.cs" />
+    <Compile Include="src\DebugConsole\Command.cs" />
+    <Compile Include="src\DebugConsole\DefaultCommands.cs" />
+    <Compile Include="src\DebugConsole\History.cs" />
+    <Compile Include="src\DebugConsole\Parser\AST.cs" />
+    <Compile Include="src\DebugConsole\Parser\Executor.cs" />
+    <Compile Include="src\DebugConsole\Parser\Lexer.cs" />
+    <Compile Include="src\DebugConsole\Parser\Parser.cs" />
+    <Compile Include="src\DebugConsole\Parser\Token.cs" />
+    <Compile Include="src\Util\UnityUtil.cs" />
+    <Compile Include="src\Extensions\BinaryReader.cs" />
+    <Compile Include="src\External\ObjectDumper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
     <Folder Include="src\Patches\" />
+    <Folder Include="src\GUI\" />
+    <Folder Include="src\DebugConsole\" />
+    <Folder Include="src\Util\" />
+    <Folder Include="src\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\Logger\Logger.csproj">
@@ -89,6 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\External\SGUI\.gitignore" />
+    <None Include="src\External\SGUI\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
