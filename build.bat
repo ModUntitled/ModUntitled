@@ -92,7 +92,7 @@ rem )
 
 :: Zipping it all up
 pushd "%build%"
-%sevenz% a MOD-UNTITLED\zip *
+%sevenz% a MOD-UNTITLED.zip *
 popd
 move "%build%\MOD-UNTITLED.zip" "%build_zip%"
 
