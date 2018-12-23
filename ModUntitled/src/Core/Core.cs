@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Logger = ModTheGungeon.Logger;
 
 namespace ModUntitled {
     public static class Loader {

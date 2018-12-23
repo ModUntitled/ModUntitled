@@ -2,11 +2,14 @@
 setlocal EnableDelayedExpansion 
 
 :: Requirements
-if not exist "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" (
-    echo ERROR: Microsoft.NET framework 3.5 not found. Make sure you have Virtual Studio installed.
-    goto _exit
-) 
 set msbuild="C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
+if not exist "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" (
+    set msbuild="C:\Program Files (x86)\MSBuild\15.0\Bin\MSBuild.exe"
+    if not exist "C:\Program Files (x86)\MSBuild\15.0\Bin\MSBuild.exe" (
+        echo ERROR: Microsoft.NET framework 3.5 not found. Make sure you have Visual Studio installed.
+        goto _exit
+    )
+) 
      
 set sevenz=7z
 if exist "C:\Program Files\7-Zip\7z.exe" (

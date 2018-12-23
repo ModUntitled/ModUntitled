@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ModUntitled;
+using ModTheGungeon;
 using SGUI;
 using UnityEngine;
-using Logger = ModUntitled.Logger;
+using Logger = ModTheGungeon.Logger;
 using ModUntitled.DebugConsole;
 
 namespace ModUntitled.DebugConsole {

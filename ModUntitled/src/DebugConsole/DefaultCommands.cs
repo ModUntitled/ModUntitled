@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Logger = ModUntitled.Logger;
+using Logger = ModTheGungeon.Logger;
 using ModUntitled.Tools;
 
 namespace ModUntitled.DebugConsole {

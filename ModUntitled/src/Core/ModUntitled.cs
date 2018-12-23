@@ -1,7 +1,7 @@
 ﻿using System;
 using ModUntitled;
 using UnityEngine;
-using Logger = ModUntitled.Logger;
+using Logger = ModTheGungeon.Logger;
 using SGUI;
 
 namespace ModUntitled {
