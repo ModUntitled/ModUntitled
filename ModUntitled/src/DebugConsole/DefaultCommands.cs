@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Logger = ModTheGungeon.Logger;
+using Logger = ModUntitled.Logger;
 using ModUntitled.Tools;
 
 namespace ModUntitled.DebugConsole {
@@ -176,7 +176,7 @@ namespace ModUntitled.DebugConsole {
                 //    .WithSubCommand("idof", (args) => {
                 //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (numeric ID).");
                 //        var id = int.Parse(args[0]);
-                //        foreach (var pair in ModTheGungeon.Items.Pairs) {
+                //        foreach (var pair in ModUntitled.Items.Pairs) {
                 //            if (pair.Value.PickupObjectId == id) return pair.Key;
                 //        }
                 //        return "Entry not found.";
@@ -184,7 +184,7 @@ namespace ModUntitled.DebugConsole {
                 //    .WithSubCommand("nameof", (args) => {
                 //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
                 //        var id = args[0];
-                //        foreach (var pair in ModTheGungeon.Items.Pairs) {
+                //        foreach (var pair in ModUntitled.Items.Pairs) {
                 //            if (pair.Key == id) return _GetPickupObjectName(pair.Value);
                 //        }
                 //        return "Entry not found.";
@@ -192,7 +192,7 @@ namespace ModUntitled.DebugConsole {
                 //    .WithSubCommand("numericof", (args) => {
                 //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
                 //        var id = args[0];
-                //        foreach (var pair in ModTheGungeon.Items.Pairs) {
+                //        foreach (var pair in ModUntitled.Items.Pairs) {
                 //            if (pair.Key == id) return pair.Value.PickupObjectId.ToString();
                 //        }
                 //        return "Entry not found.";
@@ -200,7 +200,7 @@ namespace ModUntitled.DebugConsole {
                 //    .WithSubCommand("list", (args) => {
                 //        var s = new StringBuilder();
                 //        var pairs = new List<KeyValuePair<string, PickupObject>>();
-                //        foreach (var pair in ModTheGungeon.Items.Pairs) {
+                //        foreach (var pair in ModUntitled.Items.Pairs) {
                 //            pairs.Add(pair);
                 //        }
                 //        foreach (var pair in pairs) {
@@ -216,7 +216,7 @@ namespace ModUntitled.DebugConsole {
                 //        return s.ToString();
                 //    })
                 //    .WithSubCommand("random", (args) => {
-                //        return ModTheGungeon.Items.RandomKey;
+                //        return ModUntitled.Items.RandomKey;
                 //    })
                 //);
 
@@ -224,9 +224,9 @@ namespace ModUntitled.DebugConsole {
             //    var player = GameManager.Instance.PrimaryPlayer;
             //    if (player == null) throw new Exception("No player");
             //    var cell = player.CurrentRoom.GetRandomAvailableCellDumb();
-            //    var entity = AIActor.Spawn(ModTheGungeon.Entities[args[0]], cell, player.CurrentRoom, true, AIActor.AwakenAnimationType.Default, true);
+            //    var entity = AIActor.Spawn(ModUntitled.Entities[args[0]], cell, player.CurrentRoom, true, AIActor.AwakenAnimationType.Default, true);
 
-            //    if (ModTheGungeon.Entities.GetType(args[0]) == ModTheGungeon.EntityType.Friendly) {
+            //    if (ModUntitled.Entities.GetType(args[0]) == ModUntitled.EntityType.Friendly) {
             //        entity.CompanionOwner = player;
             //        entity.CompanionSettings = new ActorCompanionSettings();
             //        entity.CanTargetPlayers = false;
@@ -251,7 +251,7 @@ namespace ModUntitled.DebugConsole {
             //    var s = new StringBuilder();
 
             //    s.AppendLine("Loaded mods:");
-            //    foreach (var mod in ModTheGungeon.ModLoader.LoadedMods) {
+            //    foreach (var mod in ModUntitled.ModLoader.LoadedMods) {
             //        _GetModInfo(s, mod);
             //    }
             //    return s.ToString();
@@ -263,7 +263,7 @@ namespace ModUntitled.DebugConsole {
             });
 
             //AddCommand("give", (args) => {
-            //    LootEngine.TryGivePrefabToPlayer(ModTheGungeon.Items[args[0]].gameObject, GameManager.Instance.PrimaryPlayer, true);
+            //    LootEngine.TryGivePrefabToPlayer(ModUntitled.Items[args[0]].gameObject, GameManager.Instance.PrimaryPlayer, true);
             //    return args[0];
             //});
 

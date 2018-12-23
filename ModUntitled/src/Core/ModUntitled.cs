@@ -1,11 +1,11 @@
 ﻿using System;
-using ModTheGungeon;
+using ModUntitled;
 using UnityEngine;
-using Logger = ModTheGungeon.Logger;
+using Logger = ModUntitled.Logger;
 using SGUI;
 
 namespace ModUntitled {
-    public class ModUntitled : MonoBehaviour {
+    public partial class ModUntitled : MonoBehaviour {
         public const string VERSION = "0.1 DEV";
         private const float _FPS_INTERVAL = 1f;
 
@@ -33,6 +33,7 @@ namespace ModUntitled {
             SetupSGUI();
             SetupDebugText();
             SetupDebugConsole();
+            //_InitIDs(); //Call this here? Or nah.
         }
 
         public void SetupSGUI() {
