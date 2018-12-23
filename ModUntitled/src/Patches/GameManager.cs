@@ -6,7 +6,7 @@
 ///////////////////////////////
 
 using System;
-using ModTheGungeon;
+using ModUntitled;
 using UnityEngine;
 using System.Reflection;
 using MonoMod;

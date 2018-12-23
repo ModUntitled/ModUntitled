@@ -5,7 +5,7 @@
 // 'Instance' field in MMFC
 
 using System;
-using ModTheGungeon;
+using ModUntitled;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Reflection;

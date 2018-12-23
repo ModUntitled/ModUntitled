@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using ModTheGungeon;
+using ModUntitled;
 using SGUI;
 using UnityEngine;
-using Logger = ModTheGungeon.Logger;
+using Logger = ModUntitled.Logger;
 using ModUntitled.DebugConsole;
 
 namespace ModUntitled.DebugConsole {
@@ -453,7 +453,7 @@ namespace ModUntitled.DebugConsole {
         //        LuaMode = false;
         //        return "[left lua mode]";
         //    }
-        //    var lua = ModTheGungeon.ModLoader.LuaState;
+        //    var lua = ModUntitled.ModLoader.LuaState;
         //    lua.EnterArea();
         //    var top1 = lua.StackTop;
         //    lua.BeginProtCall();
