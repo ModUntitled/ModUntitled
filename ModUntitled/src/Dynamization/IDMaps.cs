@@ -2,61 +2,104 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
 
 namespace ModUntitled {
     public partial class ModUntitled : MonoBehaviour {
-        public enum ItemType {
-            Unknown,
-            Item,
-            Consumable,
-            Syn//ergy
+        [Flags]
+        public enum ItemTags {
+            Unknown = 2 << 0,
+            Item = 2 << 1,
+            Consumable = 2 << 2,
+            Synergy = 2 << 3,
+
+            Unused = 2 << 4,
+            Internal = 2 << 5
         }
 
-        public enum EntityType {
-            Unknown,
-            Enemy,
-            Friendly
+        [Flags]
+        public enum EnemyTags {
+            Unknown = 2 << 0,
+            Enemy = 2 << 1,
+            Friendly = 2 << 2,
+
+            Unused = 2 << 3,
+            Internal = 2 << 4
         }
 
-        public static IDPool<PickupObject, ItemType> Items;
-        public static IDPool<AIActor, EntityType> Entities;
+        [Flags]
+        public enum CharacterTags {
+            Char = 2 << 0,
+            Unlock = 2 << 1,
+            Unused = 2 << 2
+        }
 
-        private IDPool<T, TType> _ReadIDMap<T, TType>(IList<T> list, string path) where T : UnityEngine.Object {
-            var pool = new IDPool<T, TType>();
+        public static IDPool<PickupObject, ItemTags> Items;
+        public static IDPool<AIActor, EnemyTags> Enemies;
+        public static IDPool<PlayerController, CharacterTags> Characters;
 
-            using (var file = File.OpenRead(path)) {
-                using (var reader = new StreamReader(file)) {
-                    var line_id = 0;
+        private IDPool<T, TagType> _ReadIDMapBraveResources<T, TagType>(StreamReader stream) where T : UnityEngine.Component where TagType : struct, IConvertible {
+            return _ReadIDMap<T, TagType>((line_id, prefab_name) => {
+                prefab_name = prefab_name.Replace("%%%", " ");
 
-                    while (!reader.EndOfStream) {
-                        line_id += 1;
-                        var line = reader.ReadLine().Trim();
-                        if (line.StartsWithInvariant("#")) continue;
-                        if (line.Length == 0) continue;
+                var prefab = BraveResources.Load<GameObject>(prefab_name);
+                if (prefab == null) throw new Exception($"Failed parsing ID map file: failed to load asset '{prefab_name}'");
+                var component = prefab.GetComponent<T>();
+                if (component == null) throw new Exception($"Failed parsing ID map file: successfully loaded asset '{prefab_name}', but it doesn't have a '{typeof(T).Name}' type component");
+                return component;
+            }, stream);
+        }
 
-                        var split = line.Split(' ');
-                        if (split.Length < 3) {
-                            throw new Exception($"Failed parsing ID map file: not enough columns at line {line_id} (need at least 2, ID and the name)");
-                        }
-                        var type_el_split = split[0].Split(',');
-                        var type = type_el_split[0];
-                        var type_val = (TType)Enum.Parse(typeof(TType), type, true);
+        private IDPool<T, TagType> _ReadIDMapEnemyDB<T, TagType>(StreamReader stream) where T : UnityEngine.Component where TagType : struct, IConvertible {
+            return _ReadIDMap<T, TagType>((line_id, prefab_name) => {
+                prefab_name = prefab_name.Replace("%%%", " ");
 
-                        string subtype = null;
-                        if (type_el_split.Length >= 2) {
-                            subtype = type_el_split[1];
-                        }
+                var prefab = EnemyDatabase.AssetBundle.LoadAsset<GameObject>(prefab_name);
+                if (prefab == null) throw new Exception($"Failed parsing ID map file: failed to load asset '{prefab_name}'");
+                var component = prefab.GetComponent<T>();
+                if (component == null) throw new Exception($"Failed parsing ID map file: successfully loaded asset '{prefab_name}', but it doesn't have a '{typeof(T).Name}' type component");
+                return component;
+            }, stream);
+        }
 
-                        int id;
-                        if (!int.TryParse(split[1], out id)) throw new Exception($"Failed parsing ID map file: ID column at line {line_id} was not an integer");
+        private IDPool<T, TagType> _ReadIDMapList<T, TagType>(List<T> list, StreamReader stream) where T : UnityEngine.Object where TagType : struct, IConvertible {
+            return _ReadIDMap<T, TagType>(
+                obtain_func: (line_id, id_str) => {
+                    int id;
+                    if (!int.TryParse(id_str, out id)) throw new Exception($"Failed parsing ID map file: ID column at line {line_id} was not an integer");
+                    return list[id];
+                },
+                stream: stream
+            );
+        }
 
-                        try {
-                            pool[$"gungeon:{split[2]}"] = list[id];
-                            pool.SetType($"gungeon:{split[2]}", type_val);
-                        } catch (Exception e) {
-                            throw new Exception($"Failed loading ID map file: Error while adding entry to ID pool ({e.Message})");
-                        }
+        private IDPool<T, TagType> _ReadIDMap<T, TagType>(Func<int, string, T> obtain_func, StreamReader stream) where T : UnityEngine.Object where TagType : struct, IConvertible {
+            var pool = new IDPool<T, TagType>();
+
+            var line_id = 0;
+
+            while (!stream.EndOfStream) {
+                line_id += 1;
+                var line = stream.ReadLine().Trim();
+                if (line.StartsWithInvariant("#")) continue;
+                if (line.Length == 0) continue;
+
+                var split = line.Split(' ');
+                if (split.Length < 3) {
+                    throw new Exception($"Failed parsing ID map file: not enough columns at line {line_id} (need at least 2, ID and the name)");
+                }
+                var tags_split = split[0].Split(',');
+
+                try {
+                    var name_id = $"gungeon:{split[2]}";
+                    pool[name_id] = obtain_func.Invoke(line_id, split[1]);
+
+                    for (int i = 0; i < tags_split.Length; i++) {
+                        var tag = (TagType)Enum.Parse(typeof(TagType), tags_split[i], true);
+                        pool.AddTag(name_id, tag);
                     }
+                } catch (Exception e) {
+                    throw new Exception($"Failed loading ID map file: Error while adding entry to ID pool ({e.Message})");
                 }
             }
 
@@ -64,46 +107,29 @@ namespace ModUntitled {
             return pool;
         }
 
-        private void _InitIDs() {
-            var id_pool_base = Path.Combine(Paths.ResourcesFolder, "idmaps");
-            ModUntitled.Logger.Info("Loading item ID map");
-            Items = _ReadIDMap<PickupObject, ItemType>(PickupObjectDatabase.Instance.Objects, Path.Combine(id_pool_base, "items.txt"));
+        private StreamReader GetIDMapStream(string id) {
+            var asm = Assembly.GetExecutingAssembly();
+            var res_name = $"idmap:{id}";
 
-            ModUntitled.Logger.Info("Loading entity ID map");
-            Entities = new IDPool<AIActor, EntityType>();
-            using (var file = File.OpenRead(Path.Combine(id_pool_base, "enemies.txt"))) {
-                using (var reader = new StreamReader(file)) {
-                    var line_id = 0;
+            return new StreamReader(asm.GetManifestResourceStream(res_name));
+        }
 
-                    while (!reader.EndOfStream) {
-                        line_id += 1;
-                        var line = reader.ReadLine().Trim();
-                        if (line.StartsWithInvariant("#")) continue;
-                        if (line.Length == 0) continue;
+        private void SetupIDPools() {
+            Logger.Debug("SetupIDPools()");
 
-                        var split = line.Split(' ');
-                        if (split.Length < 3) {
-                            throw new Exception($"Failed parsing ID map file: not enough columns at line {line_id} (need at least 2, ID and the name)");
-                        }
-                        var type_el_split = split[0].Split(',');
-                        var type = type_el_split[0];
-                        var type_val = (EntityType)Enum.Parse(typeof(EntityType), type, true);
+            Logger.Info("Loading item ID map");
+            using (var stream = GetIDMapStream("items")) {
+                Items = _ReadIDMapList<PickupObject, ItemTags>(PickupObjectDatabase.Instance.Objects, stream);
+            }
 
-                        string subtype = null;
-                        if (type_el_split.Length >= 2) {
-                            subtype = type_el_split[1];
-                        }
+            Logger.Info("Loading enemy ID map");
+            using (var stream = GetIDMapStream("enemies")) {
+                Enemies = _ReadIDMapEnemyDB<AIActor, EnemyTags>(stream);
+            }
 
-                        var prefab_name = split[1].Replace("%%%", " ");
-                        try {
-                            var prefab = EnemyDatabase.AssetBundle.LoadAsset<GameObject>(prefab_name);
-                            Entities[$"gungeon:{split[2]}"] = prefab.GetComponent<AIActor>();
-                            Entities.SetType($"gungeon:{split[2]}", type_val);
-                        } catch (Exception e) {
-                            throw new Exception($"Failed loading ID map file: Error while adding entry to ID pool ({e.Message})");
-                        }
-                    }
-                }
+            Logger.Info("Loading character ID map");
+            using (var stream = GetIDMapStream("characters")) {
+                Characters = _ReadIDMapBraveResources<PlayerController, CharacterTags>(stream);
             }
         }
     }

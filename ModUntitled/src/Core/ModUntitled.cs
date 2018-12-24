@@ -31,9 +31,9 @@ namespace ModUntitled {
             Logger.Info("Game Load");
 
             SetupSGUI();
+            SetupIDPools();
             SetupDebugText();
             SetupDebugConsole();
-            //_InitIDs(); //Call this here? Or nah.
         }
 
         public void SetupSGUI() {

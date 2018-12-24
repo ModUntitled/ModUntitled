@@ -4,12 +4,12 @@ using System.Linq;
 using UnityEngine;
 
 namespace ModUntitled {
-    public class IDPool<T, TType>
+    public class IDPool<T, TagType>
     {
         private Dictionary<string, T> _Storage = new Dictionary<string, T>();
         private HashSet<string> _LockedNamespaces = new HashSet<string>();
         private HashSet<string> _Namespaces = new HashSet<string>();
-        private Dictionary<string, TType> _Types = new Dictionary<string, TType>();
+        public Dictionary<string, TagType> _TagMap = new Dictionary<string, TagType>();
 
         public T this[string id]
         {
@@ -67,26 +67,33 @@ namespace ModUntitled {
             _LockedNamespaces.Add(namesp);
         }
 
-        public TType GetType(string id) {
-            id = Resolve(id);
-            VerifyID(id);
-            if (id.Any(char.IsWhiteSpace)) throw new BadIDElementException("name");
-            if (!_Storage.ContainsKey(id)) throw new NonExistantIDException(id);
-            TType t;
-            if (_Types.TryGetValue(id, out t)) {
-                return t;
-            }
-            return default(TType);
-        }
+        public void AddTag(string id, TagType tag) {
+            if (!typeof(TagType).IsEnum) throw new ArgumentException("tag must be a flag enum type");
 
-        public void SetType(string id, TType type) {
             id = Resolve(id);
             VerifyID(id);
             var entry = Split(id);
             if (_LockedNamespaces.Contains(entry.Namespace)) throw new LockedNamespaceException(entry.Namespace);
-            if (id.Any(char.IsWhiteSpace)) throw new BadIDElementException("name");
             if (!_Storage.ContainsKey(id)) throw new NonExistantIDException(id);
-            _Types[id] = type;
+
+            TagType tag_flags = (TagType)(object)0;
+            _TagMap.TryGetValue(id, out tag_flags);
+
+            tag_flags = (TagType)(object)((int)(object)tag_flags | (int)(object)tag);
+            // disgusting!
+
+            _TagMap[id] = tag_flags;
+        }
+
+        public bool HasTag(string id, TagType tag) {
+            id = Resolve(id);
+            VerifyID(id);
+            if (!_Storage.ContainsKey(id)) throw new NonExistantIDException(id);
+
+            TagType tag_flags = (TagType)(object)0;
+            _TagMap.TryGetValue(id, out tag_flags);
+
+            return ((int)(object)tag_flags & (int)(object)tag) != 0;
         }
 
         public void Set(string id, T obj)
@@ -95,7 +102,6 @@ namespace ModUntitled {
             VerifyID(id);
             var entry = Split(id);
             if (_LockedNamespaces.Contains(entry.Namespace)) throw new LockedNamespaceException(entry.Namespace);
-            if (id.Any(char.IsWhiteSpace)) throw new BadIDElementException("name");
             _Storage[id] = obj;
             if (!_Namespaces.Contains(entry.Namespace))
             {
@@ -142,7 +148,14 @@ namespace ModUntitled {
 
         public static void VerifyID(string id)
         {
-            if (id.Count(s => s == ':') > 1) throw new BadlyFormattedIDException(id);
+            var count = 0;
+            for (int i = 0; i < id.Length; i++) {
+                if (id[i] == ':') count += 1;
+                else if (char.IsWhiteSpace(id[i])) {
+                    throw new BadIDElementException("name");
+                }
+            }
+            if (count > 1) throw new BadlyFormattedIDException(id);
         }
 
         public static string Resolve(string id)

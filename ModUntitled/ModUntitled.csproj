@@ -75,7 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\Core\Core.cs" />
     <Compile Include="src\Core\ModUntitled.cs" />
-    <Compile Include="src\Core\Paths.cs" />
     <Compile Include="src\Dynamization\IDMaps.cs" />
     <Compile Include="src\Dynamization\IDPool.cs" />
     <Compile Include="src\Extensions\String.cs" />
@@ -140,7 +139,15 @@
     <None Include="src\External\SGUI\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\items.txt" />
+    <EmbeddedResource Include="res\items.txt">
+      <LogicalName>idmap:items</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="res\enemies.txt">
+      <LogicalName>idmap:enemies</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="res\characters.txt">
+      <LogicalName>idmap:characters</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

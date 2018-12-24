@@ -40,12 +40,12 @@ namespace ModUntitled.DebugConsole {
             }
         }
 
-        private PlayerController _ObtainCharacter(string name, bool alt) {
+        private PlayerController _ObtainCharacter(PlayerController prefab, bool alt) {
             PlayerController primaryPlayer = GameManager.Instance.PrimaryPlayer;
             Vector3 position = primaryPlayer.transform.position;
             Object.Destroy(primaryPlayer.gameObject);
             GameManager.Instance.ClearPrimaryPlayer();
-            GameManager.PlayerPrefabForNewGame = (GameObject)BraveResources.Load(name, ".prefab");
+            GameManager.PlayerPrefabForNewGame = prefab.gameObject;
             PlayerController component = GameManager.PlayerPrefabForNewGame.GetComponent<PlayerController>();
             GameStatsManager.Instance.BeginNewSession(component);
             PlayerController playerController = null;
@@ -61,8 +61,7 @@ namespace ModUntitled.DebugConsole {
             return playerController;
         }
 
-        private IEnumerator _ChangeCharacter(string name, bool alt) {
-            PlayerController new_player;
+        private IEnumerator _ChangeCharacter(PlayerController new_player, bool alt) {
             var gun_game = false;
             //Pixelator.Instance.FadeToBlack(0.5f, false, 0f);
             if (GameManager.Instance.PrimaryPlayer) {
@@ -71,7 +70,7 @@ namespace ModUntitled.DebugConsole {
             GameManager.Instance.PrimaryPlayer.SetInputOverride("getting deleted");
             yield return new WaitForSeconds(0.5f);
 
-            new_player = _ObtainCharacter(name, alt);
+            new_player = _ObtainCharacter(new_player, alt);
             yield return null;
 
             GameManager.Instance.MainCameraController.ClearPlayerCache();
@@ -150,7 +149,9 @@ namespace ModUntitled.DebugConsole {
                 })
                 .WithSubCommand("character", (args) => {
                     if (args.Count < 1) throw new Exception("At least 1 argument required.");
-                    ModUntitled.Instance.StartCoroutine(_ChangeCharacter(args[0], args.Count > 1));
+                    var player_controller = ModUntitled.Characters[args[0]];
+                    if (player_controller == null) throw new Exception($"Character '{args[0]}' doesn't exist.");
+                    ModUntitled.Instance.StartCoroutine(_ChangeCharacter(player_controller, args.Count > 1));
                     return $"Changed character to {args[0]}";
                 })
                 .WithSubCommand("parser-bounds-test", (args) => {
@@ -171,81 +172,81 @@ namespace ModUntitled.DebugConsole {
                 });
 
             //AddGroup("pool")
-                //.WithSubGroup(
-                //    new Group("items")
-                //    .WithSubCommand("idof", (args) => {
-                //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (numeric ID).");
-                //        var id = int.Parse(args[0]);
-                //        foreach (var pair in ModUntitled.Items.Pairs) {
-                //            if (pair.Value.PickupObjectId == id) return pair.Key;
-                //        }
-                //        return "Entry not found.";
-                //    })
-                //    .WithSubCommand("nameof", (args) => {
-                //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
-                //        var id = args[0];
-                //        foreach (var pair in ModUntitled.Items.Pairs) {
-                //            if (pair.Key == id) return _GetPickupObjectName(pair.Value);
-                //        }
-                //        return "Entry not found.";
-                //    })
-                //    .WithSubCommand("numericof", (args) => {
-                //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
-                //        var id = args[0];
-                //        foreach (var pair in ModUntitled.Items.Pairs) {
-                //            if (pair.Key == id) return pair.Value.PickupObjectId.ToString();
-                //        }
-                //        return "Entry not found.";
-                //    })
-                //    .WithSubCommand("list", (args) => {
-                //        var s = new StringBuilder();
-                //        var pairs = new List<KeyValuePair<string, PickupObject>>();
-                //        foreach (var pair in ModUntitled.Items.Pairs) {
-                //            pairs.Add(pair);
-                //        }
-                //        foreach (var pair in pairs) {
-                //            if (_GetPickupObjectName(pair.Value) == "NO NAME") {
-                //                s.AppendLine($"[{pair.Key}] {_GetPickupObjectName(pair.Value)}");
-                //            }
-                //        }
-                //        pairs.Sort((x, y) => string.Compare(_GetPickupObjectName(x.Value), _GetPickupObjectName(y.Value)));
-                //        foreach (var pair in pairs) {
-                //            if (_GetPickupObjectName(pair.Value) == "NO NAME") continue;
-                //            s.AppendLine($"[{pair.Key}] {_GetPickupObjectName(pair.Value)}");
-                //        }
-                //        return s.ToString();
-                //    })
-                //    .WithSubCommand("random", (args) => {
-                //        return ModUntitled.Items.RandomKey;
-                //    })
-                //);
-
-            //AddCommand("summon", (args) => {
-            //    var player = GameManager.Instance.PrimaryPlayer;
-            //    if (player == null) throw new Exception("No player");
-            //    var cell = player.CurrentRoom.GetRandomAvailableCellDumb();
-            //    var entity = AIActor.Spawn(ModUntitled.Entities[args[0]], cell, player.CurrentRoom, true, AIActor.AwakenAnimationType.Default, true);
-
-            //    if (ModUntitled.Entities.GetType(args[0]) == ModUntitled.EntityType.Friendly) {
-            //        entity.CompanionOwner = player;
-            //        entity.CompanionSettings = new ActorCompanionSettings();
-            //        entity.CanTargetPlayers = false;
-            //        var companion = entity.GetComponent<CompanionController>();
-            //        if (companion != null) {
-            //            companion.Initialize(player);
-            //            if (companion.specRigidbody) {
-            //                PhysicsEngine.Instance.RegisterOverlappingGhostCollisionExceptions(companion.specRigidbody, null, false);
+            //.WithSubGroup(
+            //    new Group("items")
+            //    .WithSubCommand("idof", (args) => {
+            //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (numeric ID).");
+            //        var id = int.Parse(args[0]);
+            //        foreach (var pair in ModUntitled.Items.Pairs) {
+            //            if (pair.Value.PickupObjectId == id) return pair.Key;
+            //        }
+            //        return "Entry not found.";
+            //    })
+            //    .WithSubCommand("nameof", (args) => {
+            //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
+            //        var id = args[0];
+            //        foreach (var pair in ModUntitled.Items.Pairs) {
+            //            if (pair.Key == id) return _GetPickupObjectName(pair.Value);
+            //        }
+            //        return "Entry not found.";
+            //    })
+            //    .WithSubCommand("numericof", (args) => {
+            //        if (args.Count < 1) throw new Exception("Exactly 1 argument required (ID).");
+            //        var id = args[0];
+            //        foreach (var pair in ModUntitled.Items.Pairs) {
+            //            if (pair.Key == id) return pair.Value.PickupObjectId.ToString();
+            //        }
+            //        return "Entry not found.";
+            //    })
+            //    .WithSubCommand("list", (args) => {
+            //        var s = new StringBuilder();
+            //        var pairs = new List<KeyValuePair<string, PickupObject>>();
+            //        foreach (var pair in ModUntitled.Items.Pairs) {
+            //            pairs.Add(pair);
+            //        }
+            //        foreach (var pair in pairs) {
+            //            if (_GetPickupObjectName(pair.Value) == "NO NAME") {
+            //                s.AppendLine($"[{pair.Key}] {_GetPickupObjectName(pair.Value)}");
             //            }
             //        }
-            //    }
+            //        pairs.Sort((x, y) => string.Compare(_GetPickupObjectName(x.Value), _GetPickupObjectName(y.Value)));
+            //        foreach (var pair in pairs) {
+            //            if (_GetPickupObjectName(pair.Value) == "NO NAME") continue;
+            //            s.AppendLine($"[{pair.Key}] {_GetPickupObjectName(pair.Value)}");
+            //        }
+            //        return s.ToString();
+            //    })
+            //    .WithSubCommand("random", (args) => {
+            //        return ModUntitled.Items.RandomKey;
+            //    })
+            //);
 
-            //    var name = args[0];
-            //    if (entity.encounterTrackable?.journalData?.PrimaryDisplayName != null) {
-            //        name = StringTableManager.GetEnemiesString(entity.encounterTrackable?.journalData?.PrimaryDisplayName);
-            //    }
+            AddCommand("summon", (args) => {
+                var player = GameManager.Instance.PrimaryPlayer;
+                if (player == null) throw new Exception("No player");
+                var cell = player.CurrentRoom.GetRandomAvailableCellDumb();
+                var entity = AIActor.Spawn(ModUntitled.Enemies[args[0]], cell, player.CurrentRoom, true, AIActor.AwakenAnimationType.Default, true);
 
-            //    return name;
-            //});
+                if (ModUntitled.Enemies.HasTag(args[0], ModUntitled.EnemyTags.Friendly)) {
+                    entity.CompanionOwner = player;
+                    entity.CompanionSettings = new ActorCompanionSettings();
+                    entity.CanTargetPlayers = false;
+                    var companion = entity.GetComponent<CompanionController>();
+                    if (companion != null) {
+                        companion.Initialize(player);
+                        if (companion.specRigidbody) {
+                            PhysicsEngine.Instance.RegisterOverlappingGhostCollisionExceptions(companion.specRigidbody, null, false);
+                        }
+                    }
+                }
+
+                var name = args[0];
+                if (entity.encounterTrackable?.journalData?.PrimaryDisplayName != null) {
+                    name = StringTableManager.GetEnemiesString(entity.encounterTrackable?.journalData?.PrimaryDisplayName);
+                }
+
+                return name;
+            });
 
             //AddCommand("listmods", (args) => {
             //    var s = new StringBuilder();
@@ -262,10 +263,10 @@ namespace ModUntitled.DebugConsole {
                 return "[entered lua mode]";
             });
 
-            //AddCommand("give", (args) => {
-            //    LootEngine.TryGivePrefabToPlayer(ModUntitled.Items[args[0]].gameObject, GameManager.Instance.PrimaryPlayer, true);
-            //    return args[0];
-            //});
+            AddCommand("give", (args) => {
+                LootEngine.TryGivePrefabToPlayer(ModUntitled.Items[args[0]].gameObject, GameManager.Instance.PrimaryPlayer, true);
+                return args[0];
+            });
 
             AddGroup("dump")
                 .WithSubCommand("synergy_chest", (args) => {
@@ -376,30 +377,30 @@ namespace ModUntitled.DebugConsole {
                         return _LogLevel.ToString().ToLowerInvariant();
                     } else {
                         switch (args[0]) {
-                        case "debug": _LogLevel = Logger.LogLevel.Debug; break;
-                        case "info": _LogLevel = Logger.LogLevel.Info; break;
-                        case "warn": _LogLevel = Logger.LogLevel.Warn; break;
-                        case "error": _LogLevel = Logger.LogLevel.Error; break;
-                        default: throw new Exception($"Unknown log level '{args[0]}");
+                            case "debug": _LogLevel = Logger.LogLevel.Debug; break;
+                            case "info": _LogLevel = Logger.LogLevel.Info; break;
+                            case "warn": _LogLevel = Logger.LogLevel.Warn; break;
+                            case "error": _LogLevel = Logger.LogLevel.Error; break;
+                            default: throw new Exception($"Unknown log level '{args[0]}");
                         }
                         return "Done.";
                     }
                 });
             //// test commands to dump collection
             //AddGroup("texdump")
-                //.WithSubCommand("collection", (args) =>
-                //{
-                //    if (args.Count == 0)
-                //    {
-                //        return "No name specified";
-                //    }
-                //    else
-                //    {
-                //        string collectionName = args[0];
-                //        Animation.Collection.Dump(collectionName);
-                //        return "Successfull";
-                //    }
-                //});
+            //.WithSubCommand("collection", (args) =>
+            //{
+            //    if (args.Count == 0)
+            //    {
+            //        return "No name specified";
+            //    }
+            //    else
+            //    {
+            //        string collectionName = args[0];
+            //        Animation.Collection.Dump(collectionName);
+            //        return "Successfull";
+            //    }
+            //});
         }
     }
 }
