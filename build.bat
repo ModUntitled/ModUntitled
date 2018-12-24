@@ -1,16 +1,24 @@
 @echo off
 setlocal EnableDelayedExpansion 
 
+
 :: Requirements
-set msbuild="C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
-if not exist "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" (
-    set msbuild="C:\Program Files (x86)\MSBuild\15.0\Bin\MSBuild.exe"
-    if not exist "C:\Program Files (x86)\MSBuild\15.0\Bin\MSBuild.exe" (
-        echo ERROR: Microsoft.NET framework 3.5 not found. Make sure you have Visual Studio installed.
-        goto _exit
-    )
+if exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" (
+	set msbuild="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
+	echo MSBuild 15.0 
+  goto _zip
 ) 
      
+if exist "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe" (
+	set msbuild="C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
+	echo MSBuild 14.0 
+  goto _zip
+) 
+
+echo ERROR: Microsoft.NET framework 3.5 not found. Make sure you have Visual Studio installed.
+goto _exit
+          
+:_zip
 set sevenz=7z
 if exist "C:\Program Files\7-Zip\7z.exe" (
     set sevenz="C:\Program Files\7-Zip\7z.exe"
