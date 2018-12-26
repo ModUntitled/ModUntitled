@@ -34,6 +34,8 @@ namespace ModUntitled {
             SetupIDPools();
             SetupDebugText();
             SetupDebugConsole();
+
+            SetupItems();
         }
 
         public void SetupSGUI() {

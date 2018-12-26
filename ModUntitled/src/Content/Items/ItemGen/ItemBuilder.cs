@@ -8,26 +8,32 @@ using System.Reflection;
 using System.IO;
 using System.Collections;
 
-namespace ItemAPI
+namespace ModUntitled
 {
     public static class ItemBuilder
     {
-        /// <summary>
-        /// Sets the base assembly of the ResourceExtractor, so 
-        /// resources can be accessed
-        /// </summary>
-        public static void Init()
-        {
-            try
-            {
-                MethodBase method = new StackFrame(1, false).GetMethod();
-                var declaringType = method.DeclaringType;
-                ResourceExtractor.SetAssembly(declaringType);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
+        private static tk2dSpriteCollectionData _AmmonomiconCollection;
+        private static tk2dSpriteCollectionData _ItemCollection;
+        private static tk2dSpriteCollectionData _WeaponCollection;
+        private static tk2dSpriteCollectionData _WeaponCollection02;
+
+        internal static void Initialize() {
+            _AmmonomiconCollection = AmmonomiconController.ForceInstance.EncounterIconCollection;
+            var sprites = UnityEngine.Object.FindObjectsOfType<tk2dBaseSprite>();
+            for (int i = 0; i < sprites.Length; i++) {
+                var sprite = sprites[i];
+
+                if (sprite?.Collection == null) continue;
+
+                if (sprite.Collection.spriteCollectionName == "ItemCollection") {
+                    _ItemCollection = sprite.Collection;
+                }
+                if (sprite.Collection.spriteCollectionName == "WeaponCollection") {
+                    _WeaponCollection = sprite.Collection;
+                }
+                if (sprite.Collection.spriteCollectionName == "WeaponCollection02") {
+                    _WeaponCollection02 = sprite.Collection;
+                }
             }
         }
 
@@ -42,9 +48,27 @@ namespace ItemAPI
         /// </summary>
         public static GameObject CreateSpriteObject(string name, string resourcePath)
         {
-            GameObject spriteObject = SpriteBuilder.SpriteFromResource(resourcePath);
+            GameObject spriteObject = SpriteBuilder.SpriteFromResource(_ItemCollection, resourcePath);
             spriteObject.name = name;
             return spriteObject;
+        }
+
+        /// <summary>
+        /// Adds a sprite definition to the Ammonomicon sprite collection
+        /// </summary>
+        /// <returns>The spriteID of the defintion in the ammonomicon collection</returns>
+        public static int AddSpriteToAmmonomicon(tk2dSpriteDefinition spriteDefinition) {
+            return SpriteBuilder.AddSpriteToCollection(spriteDefinition, _AmmonomiconCollection);
+        }
+
+        public static GameObject ItemSpriteFromResource(string spriteName) {
+            string extension = !spriteName.EndsWith(".png") ? ".png" : "";
+            string resourcePath = spriteName + extension;
+
+            var texture = ResourceExtractor.GetTextureFromResource(resourcePath);
+            if (texture == null) return null;
+
+            return SpriteBuilder.SpriteFromTexture(_ItemCollection, texture, resourcePath);
         }
 
         /// <summary>
@@ -53,27 +77,31 @@ namespace ItemAPI
         /// </summary>
         public static void SetupItem(PickupObject item, string shortDesc, string longDesc, string idPool = "customItems")
         {
-            try
-            {
-                ETGMod.Databases.Items.SetupItem(item, item.name);
+            if (item.encounterTrackable == null) item.encounterTrackable = item.gameObject.AddComponent<EncounterTrackable>();
+            if (item.encounterTrackable.journalData == null) item.encounterTrackable.journalData = new JournalEntry();
 
-                SpriteBuilder.AddToAmmonomicon(item.sprite.GetCurrentSpriteDef());
-                item.encounterTrackable.journalData.AmmonomiconSprite = item.sprite.GetCurrentSpriteDef().name;
+            item.encounterTrackable.EncounterGuid = item.name;
 
-                item.SetName(item.name);
-                item.SetShortDescription(shortDesc);
-                item.SetLongDescription(longDesc);
+            item.encounterTrackable.prerequisites = new DungeonPrerequisite[0];
+            item.encounterTrackable.journalData.SuppressKnownState = true;
 
-                if(item is PlayerItem)
-                (item as PlayerItem).consumable = false;
-                Gungeon.Game.Items.Add(idPool + ":" + item.name.ToLower().Replace(" ", "_"), item);
-                ETGMod.Databases.Items.Add(item);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-            }
+            string keyName = "#" + item.name.Replace(" ", "").ToUpperInvariant();
+            var disp_name = item.encounterTrackable.journalData.PrimaryDisplayName = keyName + "_ENCNAME";
+            var short_desc = item.encounterTrackable.journalData.NotificationPanelDescription = keyName + "_SHORTDESC";
+            var long_desc = item.encounterTrackable.journalData.AmmonomiconFullEntry = keyName + "_LONGDESC";
+            item.encounterTrackable.journalData.AmmonomiconSprite = item.name.Replace(' ', '_') + "_idle_001";
+
+            I18N.AddItemString(disp_name, item.name);
+            I18N.AddItemString(short_desc, shortDesc);
+            I18N.AddItemString(long_desc, longDesc);
+
+            AddSpriteToAmmonomicon(item.sprite.GetCurrentSpriteDef());
+            item.encounterTrackable.journalData.AmmonomiconSprite = item.sprite.GetCurrentSpriteDef().name;
+
+            if(item is PlayerItem)
+            (item as PlayerItem).consumable = false;
+
+            ModUntitled.Items.Add($"{idPool}:{item.name.ToLower().Replace(" ", "_")}", item);
         }
 
         /// <summary>

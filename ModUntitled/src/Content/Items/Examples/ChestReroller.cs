@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using ItemAPI;
 
-namespace CustomItems
+namespace ModUntitled
 {
     class ChestReroller : PlayerItem
     {
@@ -17,7 +16,7 @@ namespace CustomItems
         {
             //The name of the item
             string itemName = "D-Chest"; //The name of the item
-            string resourceName = "CustomItems/Resources/d_chest"; //Refers to an embedded png in the project. Make sure to embed your resources!
+            string resourceName = "items.ChestReroller.d_chest"; //Refers to an embedded png in the project. Make sure to embed your resources!
 
             //Generate a new GameObject with a sprite component
             GameObject spriteObj = ItemBuilder.CreateSpriteObject(itemName, resourceName);
@@ -30,7 +29,7 @@ namespace CustomItems
             string longDesc = "Rerolls chests.\n\nWe're like 20% sure this is one of Daisuke's nephews";
 
             //Adds the item to the gungeon item list, the ammonomicon, the loot table, etc.
-            ItemBuilder.SetupItem(item, shortDesc, longDesc, "kts");
+            ItemBuilder.SetupItem(item, shortDesc, longDesc, "moduntitled");
 
             //Set the cooldown type and duration of the cooldown
             ItemBuilder.SetCooldownType(item, ItemBuilder.CooldownType.Damage, 1000f);

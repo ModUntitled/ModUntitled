@@ -70,6 +70,9 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>..\libs\stripped\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet">
+      <HintPath>..\packages\YamlDotNet.5.3.0\lib\net35\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,11 +81,6 @@
     <Compile Include="src\Dynamization\IDMaps.cs" />
     <Compile Include="src\Dynamization\IDPool.cs" />
     <Compile Include="src\Extensions\String.cs" />
-    <Compile Include="src\ItemGen\Examples\ChestReroller.cs" />
-    <Compile Include="src\ItemGen\Examples\ScrollOfApproxKnowledge.cs" />
-    <Compile Include="src\ItemGen\ItemBuilder.cs" />
-    <Compile Include="src\ItemGen\ResourceExtractor.cs" />
-    <Compile Include="src\ItemGen\SpriteBuilder.cs" />
     <Compile Include="src\Patches\FoyerPreloader.cs" />
     <Compile Include="src\Patches\GameManager.cs" />
     <Compile Include="src\External\SGUI\src\EMouseStatus.cs" />
@@ -130,6 +128,21 @@
     <Compile Include="src\Util\UnityUtil.cs" />
     <Compile Include="src\Extensions\BinaryReader.cs" />
     <Compile Include="src\External\ObjectDumper.cs" />
+    <Compile Include="src\Content\Items\ItemGen\ItemBuilder.cs" />
+    <Compile Include="src\Content\Items\ItemGen\ResourceExtractor.cs" />
+    <Compile Include="src\Content\Items\ItemGen\SpriteBuilder.cs" />
+    <Compile Include="src\Content\I18N\I18N.cs" />
+    <Compile Include="src\Patches\StringTableManager.cs" />
+    <Compile Include="src\AnimLoader\Animation.cs" />
+    <Compile Include="src\AnimLoader\AnimatorGenerator.cs" />
+    <Compile Include="src\AnimLoader\Collection.cs" />
+    <Compile Include="src\AnimLoader\CollectionGenerator.cs" />
+    <Compile Include="src\AnimLoader\YAMLMapping.cs" />
+    <Compile Include="src\Content\Items\Examples\ChestReroller.cs" />
+    <Compile Include="src\Content\Items\Examples\ScrollOfApproxKnowledge.cs" />
+    <Compile Include="src\Content\Items\Items.cs" />
+    <Compile Include="src\Util\ResourceUtil.cs" />
+    <Compile Include="src\Core\RuntimeAtlas.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -142,6 +155,10 @@
     <None Include="packages.config" />
     <None Include="src\External\SGUI\.gitignore" />
     <None Include="src\External\SGUI\README.md" />
+    <None Include="res\items\ChestReroller\d_chest.png" />
+    <None Include="res\items\ScrollOfApproximateKnowledge\approx_scroll.png" />
+    <None Include="res\items\ScrollOfApproximateKnowledge\gun_text.png" />
+    <None Include="res\items\ScrollOfApproximateKnowledge\item_text.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="res\items.txt">
@@ -153,6 +170,14 @@
     <EmbeddedResource Include="res\characters.txt">
       <LogicalName>idmap:characters</LogicalName>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Content\" />
+    <Folder Include="src\Content\Items\" />
+    <Folder Include="src\Content\Items\ItemGen\" />
+    <Folder Include="src\Content\I18N\" />
+    <Folder Include="src\Content\Items\Examples\" />
+    <Folder Include="res\items\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

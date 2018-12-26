@@ -3,23 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ItemAPI;
 using UnityEngine;
 using ChestType = Chest.GeneralChestType;
 
-namespace CustomItems
+namespace ModUntitled
 {
     class ScrollOfApproxKnowledge : PassiveItem
     {
-        static string gunTextSpritePath = "CustomItems/Resources/gun_text";
-        static string itemTextSpritePath = "CustomItems/Resources/item_text";
+        static string gunTextSpritePath = "items.ScrollOfApproximateKnowledge.gun_text";
+        static string itemTextSpritePath = "items.ScrollOfApproximateKnowledge.item_text";
         static List<Tuple<Chest, int>> foundChests = new List<Tuple<Chest, int>>();
 
 
         public static void Init()
         {
             string itemName = "Scroll of Approximate Knowledge"; //The name of the item
-            string resourceName = "CustomItems/Resources/approx_scroll"; //Refers to an embedded png in the project. Make sure to embed your resources!
+            string resourceName = "items.ScrollOfApproximateKnowledge.approx_scroll"; //Refers to an embedded png in the project. Make sure to embed your resources!
 
             //Generate a new GameObject with a sprite component
             GameObject spriteObj = ItemBuilder.CreateSpriteObject(itemName, resourceName);
@@ -35,7 +34,7 @@ namespace CustomItems
                 "make a pretty good guess about anything in the Gungeon, but I wouldn't put too much faith in it.";
 
             //Adds the item to the gungeon item list, the ammonomicon, the loot table, etc.
-            ItemBuilder.SetupItem(item, shortDesc, longDesc, "kts");
+            ItemBuilder.SetupItem(item, shortDesc, longDesc, "moduntitled");
 
             //Set the rarity of the item
             item.quality = PickupObject.ItemQuality.D;
@@ -187,8 +186,7 @@ namespace CustomItems
                 gunID = SpriteBuilder.AddSpriteToCollection(gunTextSpritePath, collection);
                 itemID = SpriteBuilder.AddSpriteToCollection(itemTextSpritePath, collection);
 
-                textSprite = SpriteBuilder.SpriteFromResource(ScrollOfApproxKnowledge.gunTextSpritePath).GetComponent<tk2dSprite>();
-                textSprite.UsesSpriteCollection(collection);
+                textSprite = SpriteBuilder.SpriteFromResource(collection, ScrollOfApproxKnowledge.gunTextSpritePath).GetComponent<tk2dSprite>();
 
                 baseScale = textSprite.scale;
                 textSprite.scale = Vector2.zero;

@@ -5,6 +5,7 @@ ModUntitled/bin/{TARGET}/MonoMod.Utils.dll
 ModUntitled/bin/{TARGET}/Mono.Cecil.dll
 ModUntitled/bin/{TARGET}/Mono.Cecil.Mdb.dll
 ModUntitled/bin/{TARGET}/Mono.Cecil.Pdb.dll
+ModUntitled/bin/{TARGET}/YamlDotNet.dll
 
 # external
 # libs/Ionic.Zip.dll

@@ -5,32 +5,34 @@ using System.Text;
 using System.Reflection;
 using UnityEngine;
 
-namespace ItemAPI
+namespace ModUntitled
 {
     public static class SpriteBuilder
     {
-        private static tk2dSpriteCollectionData itemCollection = PickupObjectDatabase.GetByEncounterName("singularity").sprite.Collection;
-        private static tk2dSpriteCollectionData ammonomiconCollection = AmmonomiconController.ForceInstance.EncounterIconCollection;
+        //private static tk2dSpriteCollectionData itemCollection = PickupObjectDatabase.GetByEncounterName("singularity").sprite.Collection;
+        //private static tk2dSpriteCollectionData ammonomiconCollection = AmmonomiconController.ForceInstance.EncounterIconCollection;
 
         /// <summary>
         /// Returns an object with a tk2dSprite component with the 
         /// texture of a file in the sprites folder
         /// </summary>
-        public static GameObject SpriteFromFile(string spriteName)
-        {
-            string filename = spriteName.Replace(".png", "");
+        //public static GameObject SpriteFromFile(string spriteName)
+        //{
+        //    string filename = spriteName.Replace(".png", "");
 
-            var texture = ResourceExtractor.GetTextureFromFile(filename);
-            if (texture == null) return null;
+        //    var texture = ResourceExtractor.GetTextureFromFile(filename);
+        //    if (texture == null) return null;
 
-            return SpriteFromTexture(texture, spriteName);
-        }
+        //    return SpriteFromTexture(texture, spriteName);
+        //}
+
+        public static RuntimeAtlasPacker Packer = new RuntimeAtlasPacker();
 
         /// <summary>
         /// Returns an object with a tk2dSprite component with the 
         /// texture of an embedded resource
         /// </summary>
-        public static GameObject SpriteFromResource(string spriteName)
+        public static GameObject SpriteFromResource(tk2dSpriteCollectionData collection, string spriteName)
         {
             string extension = !spriteName.EndsWith(".png") ? ".png" : "";
             string resourcePath = spriteName + extension;
@@ -38,20 +40,21 @@ namespace ItemAPI
             var texture = ResourceExtractor.GetTextureFromResource(resourcePath);
             if (texture == null) return null;
 
-            return SpriteFromTexture(texture, resourcePath);
+            return SpriteFromTexture(collection, texture, resourcePath);
         }
 
         /// <summary>
         /// Returns an object with a tk2dSprite component with the texture provided
         /// </summary>
-        public static GameObject SpriteFromTexture(Texture2D texture, string spriteName)
-        {
+        public static GameObject SpriteFromTexture(tk2dSpriteCollectionData collection, Texture2D texture, string spriteName) {
             GameObject obj = new GameObject();
             tk2dSprite sprite = obj.AddComponent<tk2dSprite>();
 
-            int id = AddSpriteToCollection(spriteName, itemCollection);
-            sprite.SetSprite(itemCollection, id);
+            int id = SpriteBuilder.AddSpriteToCollection(spriteName, collection);
+            sprite.SetSprite(collection, id);
             sprite.SortingOrder = 0;
+            sprite.UsesSpriteCollection(collection);
+
             return obj;
         }
 
@@ -90,21 +93,12 @@ namespace ItemAPI
         }
 
         /// <summary>
-        /// Adds a sprite definition to the Ammonomicon sprite collection
-        /// </summary>
-        /// <returns>The spriteID of the defintion in the ammonomicon collection</returns>
-        public static int AddToAmmonomicon(tk2dSpriteDefinition spriteDefinition)
-        {
-            return AddSpriteToCollection(spriteDefinition, ammonomiconCollection);
-        }
-
-        /// <summary>
         /// Constructs a new tk2dSpriteDefinition with the given texture
         /// </summary>
         /// <returns>A new sprite definition with the given texture</returns>
         public static tk2dSpriteDefinition ConstructDefinition(Texture2D texture)
         {
-            RuntimeAtlasSegment ras = ETGMod.Assets.Packer.Pack(texture); //pack your resources beforehand or the outlines will turn out weird
+            RuntimeAtlasSegment ras = Packer.Pack(texture); //pack your resources beforehand or the outlines will turn out weird
             
             Material material = new Material(Shader.Find("tk2d/BlendVertexColor"));
             material.mainTexture = ras.texture;
