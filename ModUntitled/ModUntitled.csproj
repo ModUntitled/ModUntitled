@@ -78,6 +78,11 @@
     <Compile Include="src\Dynamization\IDMaps.cs" />
     <Compile Include="src\Dynamization\IDPool.cs" />
     <Compile Include="src\Extensions\String.cs" />
+    <Compile Include="src\ItemGen\Examples\ChestReroller.cs" />
+    <Compile Include="src\ItemGen\Examples\ScrollOfApproxKnowledge.cs" />
+    <Compile Include="src\ItemGen\ItemBuilder.cs" />
+    <Compile Include="src\ItemGen\ResourceExtractor.cs" />
+    <Compile Include="src\ItemGen\SpriteBuilder.cs" />
     <Compile Include="src\Patches\FoyerPreloader.cs" />
     <Compile Include="src\Patches\GameManager.cs" />
     <Compile Include="src\External\SGUI\src\EMouseStatus.cs" />
